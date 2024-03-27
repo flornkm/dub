@@ -1,4 +1,4 @@
-import { VALID_TINYBIRD_ENDPOINTS, getAnalytics } from "@/lib/analytics";
+import { getAnalytics } from "@/lib/analytics";
 import { DubApiError } from "@/lib/api/errors";
 import { withAuth } from "@/lib/auth";
 import { getDomainViaEdge } from "@/lib/planetscale";
@@ -18,6 +18,18 @@ const convertToCSV = (data) => {
     },
   });
 };
+
+const exportableEndpoints = [
+  "timeseries",
+  "country",
+  "top_urls",
+  "device",
+  "referer",
+  "city",
+  "browser",
+  "os",
+  "top_links",
+];
 
 export const GET = withAuth(
   async ({ searchParams, workspace, link }) => {
@@ -42,7 +54,7 @@ export const GET = withAuth(
 
     const zip = new JSZip();
 
-    for (const endpoint of VALID_TINYBIRD_ENDPOINTS) {
+    for (const endpoint of exportableEndpoints) {
       let response;
       if (endpoint === "top_links") {
         const data = await getAnalytics({
