@@ -1,4 +1,4 @@
-import { getAnalytics } from "@/lib/analytics";
+import { VALID_TINYBIRD_ENDPOINTS, getAnalytics } from "@/lib/analytics";
 import { DubApiError } from "@/lib/api/errors";
 import { withAuth } from "@/lib/auth";
 import { getDomainViaEdge } from "@/lib/planetscale";
@@ -7,18 +7,6 @@ import { getAnalyticsQuerySchema } from "@/lib/zod/schemas/analytics";
 import { linkConstructor } from "@dub/utils";
 import { json2csv } from "json-2-csv";
 import JSZip from "jszip";
-
-const exportableEndpoints = [
-  "timeseries",
-  "country",
-  "top_urls",
-  "device",
-  "referer",
-  "city",
-  "browser",
-  "os",
-  "top_links",
-];
 
 const convertToCSV = (data) => {
   return json2csv(data, {
@@ -54,7 +42,7 @@ export const GET = withAuth(
 
     const zip = new JSZip();
 
-    for (const endpoint of exportableEndpoints) {
+    for (const endpoint of VALID_TINYBIRD_ENDPOINTS) {
       let response;
       if (endpoint === "top_links") {
         const data = await getAnalytics({
