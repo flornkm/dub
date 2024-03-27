@@ -1,4 +1,4 @@
-import { getAnalytics } from "@/lib/analytics";
+import { VALID_TINYBIRD_ENDPOINTS, getAnalytics } from "@/lib/analytics";
 import { DubApiError } from "@/lib/api/errors";
 import { withAuth } from "@/lib/auth";
 import { getDomainViaEdge } from "@/lib/planetscale";
@@ -113,7 +113,7 @@ export const GET = withAuth(
         response = await getAnalytics({
           workspaceId: workspace.id,
           ...(linkId && { linkId }),
-          endpoint,
+          endpoint: endpoint as (typeof VALID_TINYBIRD_ENDPOINTS)[number],
           ...parsedParams,
         });
 
